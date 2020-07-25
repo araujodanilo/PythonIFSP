@@ -93,7 +93,7 @@ def VerPercentualViraLata():
         if (matrizCanil[indice][2]).lower() == "vira-lata" or (matrizCanil[indice][2]).lower() == "viralata":
             qtdCachorrosViraLata += 1
     if qtdCachorros !=0:
-        print("Pecentual de vira-latas: " + str(qtdCachorrosViraLata*100/qtdCachorros))
+        print("Pecentual de vira-latas: " + str(qtdCachorrosViraLata*100/qtdCachorros) + "%")
     else:
         print("Erro!")
 
@@ -123,9 +123,15 @@ def VerQuantidadesdeRacas():
     for racas in racaNome:
         print("Raça: " + racas + "\tQuantidade: " + str(racaContagem[racas]))
 
-
+print("a")
 def VerificarEstoque():
-    print("Moodle voltar")
+    somaPeso = 0
+    for indice in range(qtdCachorros):
+        somaPeso +=matrizCanil[indice][1]
+    if somaPeso > 0:
+        print("Quantidade necessária para proximos 12 meses: " + str(somaPeso*2/qtdCachorros) + "kg")
+    else:
+        print("Erro!")
 
 opcao = -1
 while opcao != 0:
@@ -147,6 +153,3 @@ while opcao != 0:
         VerQuantidadesdeRacas()
     elif opcao == 8:
         VerificarEstoque()
-    elif opcao == 9:
-        for indice in range(qtdCachorros):
-            print(matrizCanil[indice])
