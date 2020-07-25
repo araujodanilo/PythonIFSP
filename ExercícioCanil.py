@@ -153,3 +153,5 @@ while opcao != 0:
         VerQuantidadesdeRacas()
     elif opcao == 8:
         VerificarEstoque()
+
+    print("a")
