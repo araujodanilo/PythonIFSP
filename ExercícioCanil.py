@@ -20,15 +20,25 @@ def VerMenu():
     print("6 - Cachorro de menor peso")
     print("7 - Quantidade de cachorros de cada raça")
     print("8 - Estoque nessesário para o canil")
+    try:
+        ret = int(input("Digite a opção desejada: "))
+    except ValueError:
+        print('\nOpção inválida!')
+        print("")
+        ret = -1
+    return ret
 
+indice = 0
 def ExisteCao(nome):
+    global indice
     existe = False
     for indice in range(qtdCachorros):
-        if nome == (matrizCanil[indice].nome).lower():
+        if nome == matrizCanil[indice][0].lower():
             existe = True
     return existe, indice
 
 def CadastroDog():
+    global qtdCachorros
     variavelCachorro = []
     c = Cachorro()
     c.nome = input("Digite nome do cão: ").lower()
@@ -52,59 +62,91 @@ def AtualizarDados(nome):
     existe, indice = ExisteCao(nome)
     if existe == True:
         del chave[nome]
-        matrizCanil[indice].peso = float(input("Digite novo peso: "))
-        matrizCanil[indice].raca = input("Qual raca do cao: ")
-        matrizCanil[indice].idade = int(input("Nova idade do dog: "))
-        chave[nome] = [matrizCanil[indice].peso] + [matrizCanil[indice].raca] + [matrizCanil[indice].idade]
+        matrizCanil[indice][1] = float(input("Digite novo peso: "))
+        matrizCanil[indice][2] = input("Qual raça do cao: ")
+        matrizCanil[indice][3] = int(input("Nova idade do dog: "))
+        chave[nome] = [matrizCanil[indice][1]] + [matrizCanil[indice][2]] + [matrizCanil[indice][3]]
         print("Dados Atualizados")
     else:
         print("Não encontrado!")
 
-def CachorrosMaisVelho():
+def VerCachorrosMaisVelho():
     maiorIdade = 0
     nomeMaiorIdade = ""
     for indice in range(qtdCachorros):
-        if matrizCanil[indice].idade > maiorIdade:
-            maiorIdade = matrizCanil[indice].idade
-            nomeMaiorIdade = matrizCanil[indice].nome
+        if matrizCanil[indice][3] > maiorIdade:
+            maiorIdade = matrizCanil[indice][3]
+            nomeMaiorIdade = matrizCanil[indice][0]
     print("Nome do dog mais velho: " + str(nomeMaiorIdade) + "\tIdade: " + str(maiorIdade))
 
 def ExcluirPitbull():
-    for indice in range(1, qtdCachorros):
-        if (matrizCanil[indice].raca).lower() == "pitbull":
-            del chave[matrizCanil[indice].nome]
+    global qtdCachorros
+    for indice in range(qtdCachorros):
+        if (matrizCanil[indice][2]).lower() == "pitbull":
+            del chave[matrizCanil[indice][0]]
             del matrizCanil[indice]
             qtdCachorros = qtdCachorros - 1
 
-def PercentualViraLata():
+def VerPercentualViraLata():
     qtdCachorrosViraLata = 0
     for indice in range(qtdCachorros):
-        if (matrizCanil[indice].raca).lower() == "vira-lata" or (matrizCanil[indice].raca).lower() == "viralata":
+        if (matrizCanil[indice][2]).lower() == "vira-lata" or (matrizCanil[indice][2]).lower() == "viralata":
             qtdCachorrosViraLata += 1
+    if qtdCachorros !=0:
+        print("Pecentual de vira-latas: " + str(qtdCachorrosViraLata*100/qtdCachorros))
+    else:
+        print("Erro!")
 
-def CachorroMenorPeso():
-    menorPesoDog = matrizCanil[0].peso
-    menorPesoDogNome = matrizCanil[0].nome
+def VerCachorroMenorPeso():
+    menorPesoDog = matrizCanil[0][1]
+    menorPesoDogNome = matrizCanil[0][0]
     for indice in range(1, qtdCachorros):
-        if matrizCanil[indice].peso < menorPesoDog:
-            menorPesoDog = matrizCanil[indice].peso
-            menorPesoDogNome = matrizCanil[indice].nome
+        if matrizCanil[indice][1] < menorPesoDog:
+            menorPesoDog = matrizCanil[indice][1]
+            menorPesoDogNome = matrizCanil[indice][0]
+    print("Nome dog: " + menorPesoDogNome + "\tPeso: " + str(menorPesoDog))
 
 def VerQuantidadesdeRacas():
-    class RacasDogs():
-        def __init__(self):
-            self.nome = ""
-            self.qtd = 0
-    listasRacas = []
+    global qtdCachorros
+    racaContagem = {}
+    racaNome = []
     for indice in range(qtdCachorros):
-        eiste = False
-        for racas in listasRacas:
-            if (matrizCanil[indice].nome).lower() == racas:
-                racas.qtd += 1
+        existe = False
+        for racas in racaContagem:
+            if matrizCanil[indice][2].lower() == racas:
                 existe = True
+                racaContagem[matrizCanil[indice][2]] += 1
                 break
         if existe == False:
-            r = RacasDogs()
-            r.nome = RacasDogs
-            r.qtd = 1
-            listasRacas.append(r)
+            racaContagem[matrizCanil[indice][2]] = 1
+            racaNome.append(matrizCanil[indice][2])
+    for racas in racaNome:
+        print("Raça: " + racas + "\tQuantidade: " + str(racaContagem[racas]))
+
+
+def VerificarEstoque():
+    print("Moodle voltar")
+
+opcao = -1
+while opcao != 0:
+    opcao = VerMenu()
+    if opcao == 1:
+        CadastroDog()
+    elif opcao == 2:
+        nome = input("Digite nome do dog: ").lower()
+        AtualizarDados(nome)
+    elif opcao == 3:
+        VerCachorrosMaisVelho()
+    elif opcao == 4:
+        ExcluirPitbull()
+    elif opcao == 5:
+        VerPercentualViraLata()
+    elif opcao == 6:
+        VerCachorroMenorPeso()
+    elif opcao == 7:
+        VerQuantidadesdeRacas()
+    elif opcao == 8:
+        VerificarEstoque()
+    elif opcao == 9:
+        for indice in range(qtdCachorros):
+            print(matrizCanil[indice])
