@@ -90,5 +90,21 @@ def CachorroMenorPeso():
             menorPesoDog = matrizCanil[indice].peso
             menorPesoDogNome = matrizCanil[indice].nome
 
-
-print("")
+def VerQuantidadesdeRacas():
+    class RacasDogs():
+        def __init__(self):
+            self.nome = ""
+            self.qtd = 0
+    listasRacas = []
+    for indice in range(qtdCachorros):
+        eiste = False
+        for racas in listasRacas:
+            if (matrizCanil[indice].nome).lower() == racas:
+                racas.qtd += 1
+                existe = True
+                break
+        if existe == False:
+            r = RacasDogs()
+            r.nome = RacasDogs
+            r.qtd = 1
+            listasRacas.append(r)
