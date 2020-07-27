@@ -1,7 +1,6 @@
-chave = {}
 matrizCanil = []
 
-qtdCachorros = 0
+qtdCachorros = 0 # a contagem de cachorros cadastrados
 
 class Cachorro:
     def __init__(self):
@@ -10,6 +9,7 @@ class Cachorro:
         self.raca = ""
         self.idade = 0
 
+#Opcões menu
 def VerMenu():
     print("Menu")
     print("1 - Cadastro animal")
@@ -21,24 +21,29 @@ def VerMenu():
     print("7 - Quantidade de cachorros de cada raça")
     print("8 - Estoque nessesário para o canil")
     try:
-        ret = int(input("Digite a opção desejada: "))
+        opcao = int(input("Digite a opção desejada: "))
     except ValueError:
         print('\nOpção inválida!')
         print("")
         ret = -1
-    return ret
+    return opcao
 
+# Defini aqui a varivel pois como vou usar a varivel para ser usada em outra função e é preciso denifir como global
+# Tem que definir antes também
 indice = 0
+
+# Aqui a verifica se  cao foi casdastrado
 def ExisteCao(nome):
-    global indice
+    global indice # Definindo a variavel para global pois o python  aparece um erro no compilador
     existe = False
     for indice in range(qtdCachorros):
         if nome == matrizCanil[indice][0].lower():
             existe = True
     return existe, indice
 
+# Aqui é para cadastrar o cao e já salvar na matriz
 def CadastroDog():
-    global qtdCachorros
+    global qtdCachorros # Definindo a variavel para global pois o python  aparece um erro no compilador
     variavelCachorro = []
     c = Cachorro()
     c.nome = input("Digite nome do cão: ").lower()
@@ -52,24 +57,23 @@ def CadastroDog():
         c.idade = int(input("Quantos anos o cachorro tem: "))
         variavelCachorro.append(c.idade)
         matrizCanil.append(variavelCachorro)
-        chave[c.nome] = [c.peso] + [c.raca] + [c.idade]
         qtdCachorros += 1
         print("Cadastrado!")
     else:
         print("Nome cão ja existe!")
 
+# Dado um nome de um cachorro  atualiza o dados dele
 def AtualizarDados(nome):
     existe, indice = ExisteCao(nome)
     if existe == True:
-        del chave[nome]
         matrizCanil[indice][1] = float(input("Digite novo peso: "))
         matrizCanil[indice][2] = input("Qual raça do cao: ")
         matrizCanil[indice][3] = int(input("Nova idade do dog: "))
-        chave[nome] = [matrizCanil[indice][1]] + [matrizCanil[indice][2]] + [matrizCanil[indice][3]]
         print("Dados Atualizados")
     else:
         print("Não encontrado!")
 
+# Função para achar o cachrro com maior idade
 def VerCachorrosMaisVelho():
     maiorIdade = 0
     nomeMaiorIdade = ""
@@ -79,14 +83,15 @@ def VerCachorrosMaisVelho():
             nomeMaiorIdade = matrizCanil[indice][0]
     print("Nome do dog mais velho: " + str(nomeMaiorIdade) + "\tIdade: " + str(maiorIdade))
 
+# De todos cacchros cadastrados ele apaga todos que sãoo da raça pitbull
 def ExcluirPitbull():
-    global qtdCachorros
+    global qtdCachorros # Definindo a variavel para global pois o python  aparece um erro no compilador
     for indice in range(qtdCachorros):
         if (matrizCanil[indice][2]).lower() == "pitbull":
-            del chave[matrizCanil[indice][0]]
             del matrizCanil[indice]
             qtdCachorros = qtdCachorros - 1
 
+# Calcula o percentual de vira-latas cadastrados
 def VerPercentualViraLata():
     qtdCachorrosViraLata = 0
     for indice in range(qtdCachorros):
@@ -97,6 +102,7 @@ def VerPercentualViraLata():
     else:
         print("Erro!")
 
+# Acha o cachorro com menor peso
 def VerCachorroMenorPeso():
     menorPesoDog = matrizCanil[0][1]
     menorPesoDogNome = matrizCanil[0][0]
@@ -106,8 +112,9 @@ def VerCachorroMenorPeso():
             menorPesoDogNome = matrizCanil[indice][0]
     print("Nome dog: " + menorPesoDogNome + "\tPeso: " + str(menorPesoDog))
 
+# Conta todos tipos de raça e exibi todas elas
 def VerQuantidadesdeRacas():
-    global qtdCachorros
+    global qtdCachorros # Definindo a variavel para global pois o python  aparece um erro no compilador
     racaContagem = {}
     racaNome = []
     for indice in range(qtdCachorros):
@@ -123,13 +130,13 @@ def VerQuantidadesdeRacas():
     for racas in racaNome:
         print("Raça: " + racas + "\tQuantidade: " + str(racaContagem[racas]))
 
-print("a")
+# Faz uma contagem de 2kg de ração por cada kilo de peso dos cachorros
 def VerificarEstoque():
     somaPeso = 0
     for indice in range(qtdCachorros):
         somaPeso +=matrizCanil[indice][1]
     if somaPeso > 0:
-        print("Quantidade necessária para proximos 12 meses: " + str(somaPeso*2/qtdCachorros) + "kg")
+        print("Quantidade necessária para proximos 12 meses: " + str((somaPeso*2/qtdCachorros)*12) + "kg")
     else:
         print("Erro!")
 
@@ -153,5 +160,3 @@ while opcao != 0:
         VerQuantidadesdeRacas()
     elif opcao == 8:
         VerificarEstoque()
-
-    print("a")
