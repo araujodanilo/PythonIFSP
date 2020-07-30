@@ -1,3 +1,4 @@
-contatos_lista = [('Yan', '1234-5678'), ('Pedro', '9999-9999'),
-                    ('Ana', '8765-4321'), ('Marina', '8877-7788')]
-
+printar = "13/03/2001"
+printar2 = int(printar[6:])
+print(printar[3:5])
+print(printar2)
