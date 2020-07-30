@@ -111,15 +111,13 @@ def VerificarData(data):
             return True
     return False
 
-def AtualizarLavagem():
+"""def AtualizarLavagem():
     nome = input("Digite nome do cliente: ")
     existe = ExcluirCliente(nome)
     if existe == False:
         print("Cliente não existe!")
         return
     modelo = input("Digite modelo do carro do cliente: ")
-    for indice in range(varivelLavagens):
-
     for indice in range(varivelLavagens):
         if matrizLavagem[indice][0].lower() == cliente.lower() and matrizLavagem[indice][1].lower() == modelo.lower():
             while True:
@@ -128,7 +126,7 @@ def AtualizarLavagem():
                 if correto:
                     break
                 else:
-                    print("Data inválida!")
+                    print("Data inválida!")"""
 
 def ExcluirCliente(cliente):
     global varivelLavagens, varivelCadastados
@@ -157,8 +155,8 @@ while opcao != 0:
         ListarLavagem(mes)
     elif opcao == 5:
         LucroEstimadoMes()
-    elif opcao == 6:
-        AtualizarLavagem()
-    elif opcao == 7:
+"""    elif opcao == 6:
+        AtualizarLavagem()"""
+"""    elif opcao == 7:
         nome = input("Digite nome do cliente: ")
-        ExcluirCliente(nome)
+        ExcluirCliente(nome)"""
