@@ -1,162 +1,166 @@
 class Cliente():
     def __init__(self):
         self.nome = ""
-        self.telefone = 0
+        self.telefone = ""
 
-class Lavagem():
+class Lavagem:
     def __init__(self):
-        self.clinte = ""
-        self.modelo = ""
+        self.nome = ""
         self.data = ""
+        self.modelo = ""
         self.valor = 0.0
 
+listaClientes = []
+listaLavagens = []
+dadosClientesCarregados = False
+dadosLavagensCarregados = False
+buscarMes = {}
 
-matrizCliente = []
-matrizLavagem = []
-buscarCliente = {}
-varivelCadastados = 0
-varivelLavagens = 0
-buscarLucro = {}
-indice = 0
+for indice in range(1, 12):
+    if len(str(indice)) == 1:
+        indice = "0"+str(indice)
+    buscarMes[str(indice)] = 0
 
 def CriarMenu():
     print("Menu:")
-    print("1 - Cadastar cliente")
+    print("1 - Cadastrar cliente")
     print("2 - Listar clientes")
-    print("3 - Cadastrar lavagem")
-    print("4 - Listar lavgens")
-    print("5 - Faturamento esitmado")
-    print("6 - Atualizar lavagem")
-    print("7 - Excluir cliente")
+    print("3 - Cadstrar lavagens")
+    print("4 - Listar lavagens")
+    print("5 - Listar lavagens por mes")
+    print("6 - Atualizar dados clientes")
+    print("7 - Excluir clientes")
     try:
-        opcao = int(input("Digite a opcao: "))
+        opcao = int(input("Digite a opção: "))
     except ValueError:
-        print("Opção inválida")
         opcao = -1
+        return opcao
     return opcao
 
-def ExisteNome(nome, contagemLista):
-    global indice
-    existe = False
-    for indice in range(contagemLista):
-        if matrizCliente[indice][0].lower() == nome:
-            existe = True
-    return existe, indice
+def VerificarCliente(nome):
+    for cliente in listaClientes:
+        if nome == cliente.nome:
+            return True
+    return False
 
-def Cadastrar(nome):
-    global varivelCadastados
-    existe, indice = ExisteNome(nome, varivelCadastados)
-    if existe == False:
-        CadastroCliente = []
-        c = Cliente()
-        c.nome = nome
+def CadastrarCliente(nome):
+    if VerificarCliente(nome) == False:
         try:
+            c = Cliente()
+            c.nome = nome
             c.telefone = int(input("Digite o telefone: "))
+            listaClientes.append(c)
+            print("Cliente cadastrado!")
+            return
         except ValueError:
-            print("Telefone inválido!")
-            return False
-        CadastroCliente.append(c.nome)
-        CadastroCliente.append(c.telefone)
-        buscarCliente[c.nome] = c.telefone
-        matrizCliente.append(CadastroCliente)
-        varivelCadastados += 1
-        return True
+            print("Não foi possivel!")
+            return
     else:
-        print("Nome já existente!")
-        return False
+        print("Cliente já cadastrado")
 
 def ListarClientes():
-    print("Cadastados:")
-    for indice in range(varivelCadastados):
-        print("Nome :" + matrizCliente[indice][0] + "\tTelefone: " + str(matrizCliente[indice][1]))
+    for cliente in listaClientes:
+        print("Nome: " + cliente.nome + "\tTelefone: " + str(cliente.telefone))
 
-def CadastrarLavagem(cliente):
-    global varivelLavagens
-    existe, indice = ExisteNome(cliente, varivelCadastados)
-    if existe == False:
-        existe = Cadastrar(cliente)
-        if existe == False:
-            return
+def CadastrarLavagens():
+    nome = input("Digite nome do cliente: ").capitalize()
+    if VerificarCliente(nome) == False:
+        CadastrarCliente(nome)
     data = input("Digite a data: ")
-    correto = VerificarData(data)
-    if correto:
+    if VerificarData(data):
         lavagem = Lavagem()
-        lavagem.clinte = cliente
+        lavagem.nome = nome
         lavagem.data = data
-        lavagem.modelo = input("Digite o modelo do carro: ")
-        lavagem.valor = float(input("Digite o valor da lavagem: "))
-        varivelLavagens += 1
-        buscarLucro[data[3:8]] = lavagem.valor
-        print("Cadastro lavagem feita!")
+        lavagem.modelo = input("Digite o modelo do carro: ").capitalize()
+        lavagem.valor = float(input("Digite o valor: "))
+        listaLavagens.append(lavagem)
+        soma = float(buscarMes[lavagem.data[3:5]]) + float(lavagem.valor)
+        buscarMes[lavagem.data[3:5]] += soma
+        print("Cadastro concluido!")
     else:
-        print("Data inválida")
-        return
-
-def ListarLavagem(mes):
-    listarLavagens = []
-    for indice in range(varivelLavagens):
-        data = str(matrizLavagem[indice][2])
-        if data[3:5] == mes:
-            listarLavagens.append(matrizLavagem[indice])
-    for lavagem in listarLavagens:
-        print("Cliente: " + lavagem[0] + "\tVeiculo: " + lavagem[1] + "\nValor: " + lavagem[3] + "\tData: " + lavagem[2])
-
-def LucroEstimadoMes():
-    for indice in range(1, 12):
-        print(buscarLucro[indice])
+        print("Data inválida!")
+        print("Tente novamente  >>> 01/08/2020")
 
 def VerificarData(data):
-    if data[2] == "/" == data[5] and len(data) == 10:
+    if len(data) == 10 and data[2] == "/" == data[5]:
         if int(data[6:]) == 2020 and int(data[3:5]) >= 8 or int(data[6:]) > 2020:
             return True
     return False
 
-"""def AtualizarLavagem():
-    nome = input("Digite nome do cliente: ")
-    existe = ExcluirCliente(nome)
-    if existe == False:
-        print("Cliente não existe!")
-        return
-    modelo = input("Digite modelo do carro do cliente: ")
-    for indice in range(varivelLavagens):
-        if matrizLavagem[indice][0].lower() == cliente.lower() and matrizLavagem[indice][1].lower() == modelo.lower():
-            while True:
-                data = input("Digite a data: ")
-                correto = VerificarData(data)
-                if correto:
-                    break
-                else:
-                    print("Data inválida!")"""
+def ListarLavagens():
+    loop = 0
+    for lavagem in listaLavagens:
+        loop += 1
+        print("#" + str(loop))
+        print("Nome: " + lavagem.nome + "\tData:" + lavagem.data)
+        print("Modelo:" + lavagem.modelo + "\tValor: " + str(lavagem.valor))
 
-def ExcluirCliente(cliente):
-    global varivelLavagens, varivelCadastados
-    existeC, indice = ExisteNome(cliente, varivelCadastados)
-    if existeC:
-        del matrizCliente[indice]
-        varivelCadastados -= 1
-    existeL, indice = ExisteNome(cliente, varivelLavagens)
-    if existeL:
-        del matrizLavagem[indice]
-        varivelLavagens -= 1
+def ListarLavagemMes():
+    mes = input("Digite numero do mes: ")
+    if len(mes) == 1:
+        mes = "0"+str(mes[0])
+    print(buscarMes[mes])
+
+def AtualizarDados():
+    nome = input("Digite o nome do cliente: ").capitalize()
+    if VerificarCliente(nome):
+        for lavagem in listaLavagens:
+            if lavagem.nome == nome:
+                modelo = input("Digite o modelo do carro: ").capitalize()
+                if modelo == lavagem.modelo:
+                    data = input("Digite a data: ")
+                    if VerificarData(data):
+                        lavagem.data = data
+                        break
+                    else:
+                        print("Data inválida!")
+                        return
+        for cliente in listaClientes:
+            if cliente.nome == nome:
+                cliente.telefone = input("Digite o telefone: ")
+                print("Concluido!")
+                return
+        else:
+            print("Não encontrado")
+            return
+    print("Não foi possivel")
+
+def DeletarCliente():
+    print("Exclusão de cliente!!")
+    nome = input("Digite o nome do cliente: ").capitalize()
+    if VerificarCliente(nome):
+        loop = 0
+        for cliente in listaClientes:
+            if cliente.nome == nome:
+                del listaClientes[loop]
+                break
+            loop += 1
+        loop = 0
+        for lavagem in listaLavagens:
+            if lavagem.nome == nome:
+                del listaLavagens[loop]
+                print("Apagado!")
+                return
+            loop += 1
+    else:
+        print("Não encotrado!")
 
 opcao = -1
 while opcao != 0:
     opcao = CriarMenu()
     if opcao == 1:
-        nome = input("Digite o nome do cliente: ")
-        Cadastrar(nome)
+        nome = input("Digite o nome: ").capitalize()
+        CadastrarCliente(nome)
     elif opcao == 2:
         ListarClientes()
     elif opcao == 3:
-        nome = input("Digite o nome do cliente: ")
-        CadastrarLavagem(nome)
+        CadastrarLavagens()
     elif opcao == 4:
-        mes = input("Digite o numero do mes: ")
-        ListarLavagem(mes)
+        ListarLavagens()
     elif opcao == 5:
-        LucroEstimadoMes()
-"""    elif opcao == 6:
-        AtualizarLavagem()"""
-"""    elif opcao == 7:
-        nome = input("Digite nome do cliente: ")
-        ExcluirCliente(nome)"""
+        ListarLavagemMes()
+    elif opcao == 6:
+        AtualizarDados()
+    elif opcao == 7:
+        DeletarCliente()
+
